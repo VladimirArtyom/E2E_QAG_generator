@@ -39,9 +39,10 @@ if __name__ == "__main__":
     tokenizer: T5Tokenizer = T5Tokenizer.from_pretrained(args.model_name)
     tokenizer.add_special_tokens({
         "additional_special_tokens": [args.question_token, args.answer_token,
-                                      args.context_token, args.distractor_token]
+                                      args.context_token]
     })
     model = T5ForConditionalGeneration.from_pretrained(args.model_name).to(args.device)
+    model.resize_token_embeddings(len(tokenizer))
     data = datasets.load_dataset(args.dataset_path)
     train_data = data["train"]
     valid_data = data["validation"]
