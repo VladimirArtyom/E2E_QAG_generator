@@ -77,7 +77,7 @@ if __name__ == "__main__":
                             AdamW,
                             args.lr)
     if args.load_model:
-        model_module.model.load_state_dict(load(args.load_model,
+        model_module.load_state_dict(load(args.load_model,
                                                 map_location=args.load_map_location)["state_dict"])
         print("Training from last checkpoint")
     else:
