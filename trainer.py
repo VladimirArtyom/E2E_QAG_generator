@@ -31,6 +31,7 @@ def parse_argument() -> Namespace:
     parser.add_argument("--logs_dir", type=str, default="/content/drive/MyDrive/Thesis/qag_data/model_1/logs")
     parser.add_argument("--acc", type=str, default="gpu")
     parser.add_argument("--load_model", type=str, default="/content/drive/MyDrive/Thesis/qag_data/model_1/best_checkpoint.ckpt")
+    parser.add_argument("--load_map_location", type=str, default="cpu")
 
     return parser.parse_args()
 
@@ -75,6 +76,12 @@ if __name__ == "__main__":
                             len(tokenizer),
                             AdamW,
                             args.lr)
+    if args.load_model:
+        model_module.model.load_state_dict(load(args.load_model,
+                                                map_location=args.load_map_location)["state_dict"])
+        print("Training from last checkpoint")
+    else:
+        print("Training without checkpoint")
     trainer = Trainer(
         accelerator=args.acc,
         callbacks=model_callbacks,
